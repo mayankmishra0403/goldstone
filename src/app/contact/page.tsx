@@ -1,10 +1,11 @@
 'use client';
 
 import Image from 'next/image';
+import { useState } from 'react';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 import FloatingCard from '@/components/ui/FloatingCard';
-import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
-import { useState } from 'react';
+import { MapPin, Phone, Mail, Clock, Send, CheckCircle } from 'lucide-react';
+import { formsService } from '@/services/formsService';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -15,10 +16,40 @@ export default function ContactPage() {
     message: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Add form submission logic here
+    setLoading(true);
+    setError('');
+    setSuccess(false);
+
+    try {
+      await formsService.createContactMessage({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone || undefined,
+        subject: formData.subject,
+        message: formData.message,
+        status: 'unread'
+      });
+
+      setSuccess(true);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: ''
+      });
+    } catch (err) {
+      console.error(err);
+      setError('Failed to send message. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -41,7 +72,7 @@ export default function ContactPage() {
               Get in <span className="font-bold">Touch</span>
             </h1>
             <p className="text-xl text-white/90 font-light max-w-2xl mx-auto">
-               We&apos;re here to assist you with your perfect stay
+              We&apos;re here to assist you with your perfect stay
             </p>
           </AnimatedSection>
         </div>
@@ -65,7 +96,7 @@ export default function ContactPage() {
               {
                 icon: Mail,
                 title: 'Email',
-                lines: ['info@grandpalace.com', 'reservations@grandpalace.com', 'events@grandpalace.com']
+                lines: ['info@goldstonehotel.com', 'reservations@goldstonehotel.com', 'events@goldstonehotel.com']
               },
               {
                 icon: Clock,
@@ -80,7 +111,7 @@ export default function ContactPage() {
                       <item.icon className="w-6 h-6 text-gray-700" strokeWidth={1.5} />
                     </div>
                   </div>
-                  <h3 className="font-medium text-lg">{item.title}</h3>
+                  <h3 className="font-bold text-lg">{item.title}</h3>
                   <div className="space-y-1">
                     {item.lines.map((line, idx) => (
                       <p key={idx} className="text-gray-600 font-light text-sm">{line}</p>
@@ -101,6 +132,22 @@ export default function ContactPage() {
             <AnimatedSection delay={0.1}>
               <div className="bg-white p-8 shadow-lg">
                 <h2 className="font-serif text-3xl mb-6">Send us a Message</h2>
+
+                {success && (
+                  <div className="bg-green-50 border border-green-200 text-green-800 px-6 py-4 rounded-lg mb-6">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5" />
+                      <span>Message sent successfully! We&apos;ll respond within 24 hours.</span>
+                    </div>
+                  </div>
+                )}
+
+                {error && (
+                  <div className="bg-red-50 border border-red-200 text-red-800 px-6 py-4 rounded-lg mb-6">
+                    {error}
+                  </div>
+                )}
+
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
@@ -165,10 +212,11 @@ export default function ContactPage() {
 
                   <button
                     type="submit"
-                    className="w-full bg-gray-900 text-white py-4 font-medium tracking-wide hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
+                    disabled={loading}
+                    className="w-full bg-gray-900 text-white py-4 font-medium tracking-wide hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
                   >
                     <Send className="w-4 h-4" />
-                    Send Message
+                    {loading ? 'Sending...' : 'Send Message'}
                   </button>
                 </form>
               </div>

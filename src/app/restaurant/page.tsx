@@ -1,11 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-
 import { useState } from 'react';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 import FloatingCard from '@/components/ui/FloatingCard';
-import { Clock, Phone, Award, ChefHat } from 'lucide-react';
+import { Clock, Phone, Award, ChefHat, CheckCircle } from 'lucide-react';
+import { formsService } from '@/services/formsService';
 
 export default function RestaurantPage() {
   const [formData, setFormData] = useState({
@@ -17,10 +17,36 @@ export default function RestaurantPage() {
     guests: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Reservation request:', formData);
-    // Add Appwrite submission logic
+    setLoading(true);
+    setError('');
+    setSuccess(false);
+
+    try {
+      await formsService.createTableBooking({
+        guestName: formData.name,
+        guestPhone: formData.phone,
+        guestEmail: formData.email || undefined,
+        bookingDate: new Date(formData.date + 'T' + formData.time).toISOString(),
+        bookingTime: formData.time,
+        numberOfGuests: parseInt(formData.guests),
+        venue: 'restaurant',
+        status: 'requested'
+      });
+
+      setSuccess(true);
+      setFormData({ name: '', phone: '', email: '', date: '', time: '', guests: '' });
+    } catch (err) {
+      console.error(err);
+      setError('Failed to submit reservation. Please try again or call us directly.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const menuCategories = [
@@ -163,6 +189,21 @@ export default function RestaurantPage() {
           </AnimatedSection>
           
           <div className="max-w-2xl mx-auto">
+            {success && (
+              <div className="bg-green-50 border border-green-200 text-green-800 px-6 py-4 rounded-lg mb-6">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5" />
+                  <span>Table reservation request submitted successfully! We&apos;ll confirm within 30 minutes.</span>
+                </div>
+              </div>
+            )}
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-800 px-6 py-4 rounded-lg mb-6">
+                {error}
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="bg-white p-8 shadow-lg space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
@@ -204,6 +245,7 @@ export default function RestaurantPage() {
                   <input
                     type="date"
                     required
+                    min={new Date().toISOString().split('T')[0]}
                     value={formData.date}
                     onChange={(e) => setFormData({...formData, date: e.target.value})}
                     className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
@@ -247,9 +289,10 @@ export default function RestaurantPage() {
 
               <button
                 type="submit"
-                className="w-full bg-amber-600 text-white py-4 font-medium tracking-wide hover:bg-amber-700 transition-colors"
+                disabled={loading}
+                className="w-full bg-amber-600 text-white py-4 font-medium tracking-wide hover:bg-amber-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
-                Reserve Table
+                {loading ? 'Submitting...' : 'Reserve Table'}
               </button>
             </form>
           </div>

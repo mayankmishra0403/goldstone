@@ -5,6 +5,7 @@ import { useState } from 'react';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 import FloatingCard from '@/components/ui/FloatingCard';
 import { Users, Wifi, Music, Car, Phone, CheckCircle } from 'lucide-react';
+import { formsService } from '@/services/formsService';
 
 export default function BanquetPage() {
   const [formData, setFormData] = useState({
@@ -17,9 +18,44 @@ export default function BanquetPage() {
     message: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Banquet enquiry:', formData);
+    setLoading(true);
+    setError('');
+    setSuccess(false);
+
+    try {
+      await formsService.createBanquetEnquiry({
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email || undefined,
+        eventDate: new Date(formData.eventDate).toISOString(),
+        eventType: formData.eventType,
+        expectedGuests: parseInt(formData.guests),
+        message: formData.message || undefined,
+        status: 'pending'
+      });
+
+      setSuccess(true);
+      setFormData({
+        name: '',
+        phone: '',
+        email: '',
+        eventDate: '',
+        eventType: '',
+        guests: '',
+        message: ''
+      });
+    } catch (err) {
+      console.error(err);
+      setError('Failed to submit enquiry. Please call us directly.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -118,6 +154,22 @@ export default function BanquetPage() {
             <AnimatedSection delay={0.2}>
               <div className="bg-white p-8 shadow-lg border">
                 <h3 className="font-serif text-2xl mb-6">Send Enquiry</h3>
+
+                {success && (
+                  <div className="bg-green-50 border border-green-200 text-green-800 px-6 py-4 rounded-lg mb-6">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5" />
+                      <span>Enquiry submitted successfully! We&apos;ll contact you soon.</span>
+                    </div>
+                  </div>
+                )}
+
+                {error && (
+                  <div className="bg-red-50 border border-red-200 text-red-800 px-6 py-4 rounded-lg mb-6">
+                    {error}
+                  </div>
+                )}
+
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
@@ -158,6 +210,7 @@ export default function BanquetPage() {
                       <input
                         type="date"
                         required
+                        min={new Date().toISOString().split('T')[0]}
                         value={formData.eventDate}
                         onChange={(e) => setFormData({...formData, eventDate: e.target.value})}
                         className="w-full px-4 py-2 border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
@@ -207,9 +260,10 @@ export default function BanquetPage() {
 
                   <button
                     type="submit"
-                    className="w-full bg-amber-600 text-white py-3 font-medium hover:bg-amber-700 transition-colors"
+                    disabled={loading}
+                    className="w-full bg-amber-600 text-white py-3 font-medium hover:bg-amber-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
                   >
-                    Send Enquiry
+                    {loading ? 'Submitting...' : 'Send Enquiry'}
                   </button>
                 </form>
 
