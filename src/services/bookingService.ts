@@ -6,9 +6,6 @@ const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
 const BOOKINGS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_BOOKINGS_COLLECTION_ID!;
 
 export const bookingService = {
-  /**
-   * Check availability for a room on given dates (via API route)
-   */
   async checkAvailability(
     roomId: string, 
     checkInDate: string, 
@@ -42,9 +39,6 @@ export const bookingService = {
     }
   },
 
-  /**
-   * Calculate booking amount with tax
-   */
   calculateBookingAmount(
     pricePerNight: number,
     numberOfNights: number,
@@ -57,9 +51,6 @@ export const bookingService = {
     return { roomPrice, taxAmount, totalAmount };
   },
 
-  /**
-   * Create a new booking
-   */
   async createBooking(bookingData: Omit<Booking, '$id' | '$createdAt' | '$updatedAt'>): Promise<Booking> {
     try {
       const booking = await databases.createDocument(
@@ -69,16 +60,13 @@ export const bookingService = {
         bookingData
       );
 
-      return booking as Booking;
+      return booking as unknown as Booking;
     } catch (error) {
       console.error('Error creating booking:', error);
       throw error;
     }
   },
 
-  /**
-   * Get booking by ID
-   */
   async getBookingById(bookingId: string): Promise<Booking> {
     try {
       const booking = await databases.getDocument(
@@ -86,16 +74,13 @@ export const bookingService = {
         BOOKINGS_COLLECTION_ID,
         bookingId
       );
-      return booking as Booking;
+      return booking as unknown as Booking;
     } catch (error) {
       console.error('Error fetching booking:', error);
       throw error;
     }
   },
 
-  /**
-   * Update booking status
-   */
   async updateBookingStatus(
     bookingId: string, 
     bookingStatus: Booking['bookingStatus'],
@@ -115,7 +100,7 @@ export const bookingService = {
         updateData
       );
 
-      return booking as Booking;
+      return booking as unknown as Booking;
     } catch (error) {
       console.error('Error updating booking:', error);
       throw error;

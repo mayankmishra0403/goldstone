@@ -20,7 +20,7 @@ export const roomService = {
         ]
       );
       
-      return response.documents as Room[];
+      return response.documents as unknown as Room[];
     } catch (error) {
       console.error('Error fetching rooms:', error);
       throw error;
@@ -41,7 +41,7 @@ export const roomService = {
         ]
       );
       
-      return response.documents[0] as Room || null;
+      return (response.documents[0] as unknown as Room) || null;
     } catch (error) {
       console.error('Error fetching room:', error);
       throw error;

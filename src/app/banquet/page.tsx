@@ -1,10 +1,10 @@
 'use client';
 
 import Image from 'next/image';
+import { useState } from 'react';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 import FloatingCard from '@/components/ui/FloatingCard';
 import { Users, Wifi, Music, Car, Phone, CheckCircle } from 'lucide-react';
-// Removed 'Mail' importimport { useState } from 'react';
 
 export default function BanquetPage() {
   const [formData, setFormData] = useState({
@@ -20,7 +20,6 @@ export default function BanquetPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Banquet enquiry:', formData);
-    // Add Appwrite submission logic here
   };
 
   return (
@@ -187,7 +186,7 @@ export default function BanquetPage() {
                     <input
                       type="number"
                       required
-                      max="150"
+                      max={150}
                       value={formData.guests}
                       onChange={(e) => setFormData({...formData, guests: e.target.value})}
                       className="w-full px-4 py-2 border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
