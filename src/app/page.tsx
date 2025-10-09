@@ -290,9 +290,9 @@ export default async function HomePage() {
                   ))}
                 </div>
                 <p className="text-2xl font-light text-gray-700 mb-8 italic leading-relaxed">
-                  "Excellent hospitality and service. The rooms are clean and comfortable. 
-                  MotiMahal restaurant serves amazing food. Perfect for both business and leisure stays."
-                </p>
+  &quot;Excellent hospitality and service. The rooms are clean and comfortable. 
+  MotiMahal restaurant serves amazing food. Perfect for both business and leisure stays.&quot;
+</p>
                 <div>
                   <div className="font-medium text-lg">Rajesh Sharma</div>
                   <div className="text-gray-500 font-light">Business Traveler</div>

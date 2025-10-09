@@ -10,7 +10,6 @@ export async function POST(request: NextRequest) {
   try {
     const { roomId, checkInDate, checkOutDate } = await request.json();
 
-    // Validate input
     if (!roomId || !checkInDate || !checkOutDate) {
       return NextResponse.json(
         { error: 'Missing required fields' },
@@ -18,7 +17,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get room details to know total units
     const room = await adminDatabases.getDocument(
       DATABASE_ID,
       ROOMS_COLLECTION_ID,
@@ -27,7 +25,6 @@ export async function POST(request: NextRequest) {
     
     const totalUnits = room.totalUnits || 1;
 
-    // Find overlapping bookings (confirmed or checked-in only)
     const overlappingBookings = await adminDatabases.listDocuments(
       DATABASE_ID,
       BOOKINGS_COLLECTION_ID,
@@ -49,10 +46,11 @@ export async function POST(request: NextRequest) {
       bookedUnits
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Availability check error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to check availability';
     return NextResponse.json(
-      { error: error.message || 'Failed to check availability' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

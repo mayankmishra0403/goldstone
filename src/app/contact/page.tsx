@@ -41,7 +41,7 @@ export default function ContactPage() {
               Get in <span className="font-bold">Touch</span>
             </h1>
             <p className="text-xl text-white/90 font-light max-w-2xl mx-auto">
-              We're here to assist you with your perfect stay
+               We&apos;re here to assist you with your perfect stay
             </p>
           </AnimatedSection>
         </div>

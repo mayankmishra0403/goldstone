@@ -10,7 +10,6 @@ import Image from 'next/image';
 import { Calendar, Users, CreditCard, CheckCircle, ArrowLeft } from 'lucide-react';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 
-// Helper function for safe image URLs
 const getValidImageUrl = (imageUrls: string[] | undefined): string => {
   const defaultImage = 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80';
   
@@ -71,8 +70,8 @@ function BookingContent() {
     try {
       const rooms = await roomService.getAllRooms();
       setAvailableRooms(rooms);
-    } catch (err) {
-      console.error('Error loading rooms:', err);
+    } catch (error) {
+      console.error('Error loading rooms:', error);
       setError('Failed to load rooms');
     }
   };
@@ -130,7 +129,8 @@ function BookingContent() {
       } else {
         setError('Room not available for selected dates. Please choose different dates.');
       }
-    } catch (err) {
+    } catch (error) {
+      console.error('Availability check error:', error);
       setError('Error checking availability');
     } finally {
       setLoading(false);
@@ -166,8 +166,9 @@ function BookingContent() {
       setStep(4);
       console.log('Booking created:', booking);
       
-    } catch (err: any) {
-      setError(err.message || 'Failed to create booking');
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create booking';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

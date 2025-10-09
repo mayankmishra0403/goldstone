@@ -3,8 +3,8 @@
 import Image from 'next/image';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 import FloatingCard from '@/components/ui/FloatingCard';
-import { Users, Wifi, Music, Car, Phone, Mail, CheckCircle } from 'lucide-react';
-import { useState } from 'react';
+import { Users, Wifi, Music, Car, Phone, CheckCircle } from 'lucide-react';
+// Removed 'Mail' importimport { useState } from 'react';
 
 export default function BanquetPage() {
   const [formData, setFormData] = useState({

@@ -4,8 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 import FloatingCard from '@/components/ui/FloatingCard';
-import { Users, BedDouble, Maximize, Star, Filter, Search } from 'lucide-react';
-
+import { Users, BedDouble, Maximize, Star, Filter } from 'lucide-react';
+// Removed 'Search' import
 export default async function AccommodationsPage() {
   let rooms: Room[] = [];
   let error = null;

@@ -58,7 +58,7 @@ export const bookingService = {
   },
 
   /**
-   * Create a new booking (client-side - needs permissions update)
+   * Create a new booking
    */
   async createBooking(bookingData: Omit<Booking, '$id' | '$createdAt' | '$updatedAt'>): Promise<Booking> {
     try {
@@ -103,7 +103,7 @@ export const bookingService = {
     paymentId?: string
   ): Promise<Booking> {
     try {
-      const updateData: any = { bookingStatus };
+      const updateData: Record<string, string> = { bookingStatus };
       
       if (paymentStatus) updateData.paymentStatus = paymentStatus;
       if (paymentId) updateData.paymentId = paymentId;
