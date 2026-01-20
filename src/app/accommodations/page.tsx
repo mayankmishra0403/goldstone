@@ -1,11 +1,9 @@
 import { roomService } from '@/services/roomService';
 import { Room } from '@/types/room';
 import Image from 'next/image';
-import Link from 'next/link';
 import AnimatedSection from '@/components/ui/AnimatedSection';
-import FloatingCard from '@/components/ui/FloatingCard';
 import RoomsRealtime from '@/components/RoomsRealtime';
-import { Users, BedDouble, Maximize, Star, Filter } from 'lucide-react';
+import { Filter } from 'lucide-react';
 // Removed 'Search' import
 export default async function AccommodationsPage() {
   let rooms: Room[] = [];
@@ -18,16 +16,7 @@ export default async function AccommodationsPage() {
     console.error(err);
   }
 
-  const isValidUrl = (url: string) => {
-    try {
-      new URL(url);
-      return true;
-    } catch {
-      return false;
-    }
-  };
-
-  const defaultImage = "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80";
+  // `RoomsRealtime` handles image validation and defaults on the client.
 
   return (
     <div className="min-h-screen bg-white pt-24">

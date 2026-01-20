@@ -27,7 +27,12 @@ export default function RoomsRealtime({ initialRooms }: Props) {
       try {
         // dynamic import to avoid static build-time errors with Turbopack
         const mod = await import('appwrite');
-        const RealtimeClass = (mod as any).Realtime;
+
+        type RealtimeConstructor = new (client: unknown) => {
+          subscribe: (channel: string, cb: (...args: unknown[]) => unknown) => unknown;
+        };
+
+        const RealtimeClass = (mod as unknown as { Realtime?: RealtimeConstructor }).Realtime;
         if (!RealtimeClass) {
           throw new Error('Realtime export not found in appwrite SDK');
         }
@@ -44,9 +49,9 @@ export default function RoomsRealtime({ initialRooms }: Props) {
 
         // normalize unsubscribe function
         if (typeof sub === 'function') {
-          cleanup = sub;
-        } else if (sub && typeof (sub as any).unsubscribe === 'function') {
-          cleanup = () => (sub as any).unsubscribe();
+          cleanup = sub as () => void;
+        } else if (sub && typeof (sub as unknown as { unsubscribe?: unknown }).unsubscribe === 'function') {
+          cleanup = () => (sub as unknown as { unsubscribe?: () => void }).unsubscribe?.();
         } else {
           // unknown shape — provide a no-op
           cleanup = null;
