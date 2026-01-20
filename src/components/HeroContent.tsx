@@ -40,7 +40,7 @@ export default function HeroContent() {
         variants={item}
         className="font-serif text-7xl md:text-8xl font-light tracking-wide mb-6"
       >
-        Gold Stone<br />
+        Ritam<br />
         <span className="font-bold text-amber-300">Hotel</span>
       </motion.h1>
       

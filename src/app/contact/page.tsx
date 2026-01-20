@@ -96,7 +96,7 @@ export default function ContactPage() {
               {
                 icon: Mail,
                 title: 'Email',
-                lines: ['info@goldstonehotel.com', 'reservations@goldstonehotel.com', 'events@goldstonehotel.com']
+                lines: ['info@ritamhotel.com', 'reservations@ritamhotel.com', 'events@ritamhotel.com']
               },
               {
                 icon: Clock,

@@ -14,7 +14,7 @@ export default async function HomePage() {
         <div className="absolute inset-0">
           <Image
             src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1920&q=80"
-            alt="Gold Stone Hotel"
+            alt="Ritam Hotel"
             fill
             className="object-cover"
             priority
@@ -194,7 +194,7 @@ export default async function HomePage() {
           <AnimatedSection className="text-center mb-16">
             <div className="h-px w-12 bg-amber-900 mx-auto mb-6"></div>
             <h2 className="font-serif text-5xl md:text-6xl font-light text-gray-900 mb-6">
-              Why <span className="font-bold">Gold Stone?</span>
+              Why <span className="font-bold">Ritam Hotel?</span>
             </h2>
           </AnimatedSection>
 
@@ -315,7 +315,7 @@ export default async function HomePage() {
               Ready to <span className="font-bold">Book Your Stay?</span>
             </h2>
             <p className="text-xl font-light text-amber-100 mb-12 max-w-2xl mx-auto">
-              Experience comfort and luxury at Gold Stone Hotel
+              Experience comfort and luxury at Ritam Hotel
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Link

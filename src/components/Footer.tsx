@@ -9,7 +9,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <div className="mb-4">
-              <div className="font-serif text-2xl font-medium text-white mb-1">Gold Stone Hotel</div>
+              <div className="font-serif text-2xl font-medium text-white mb-1">Ritam Hotel</div>
               <div className="text-xs tracking-widest uppercase text-amber-500">Kanpur</div>
             </div>
             <p className="text-sm font-light leading-relaxed text-gray-400">
@@ -75,7 +75,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 flex-shrink-0 text-amber-400" strokeWidth={1.5} />
-                <span>info@goldstonehotel.com</span>
+                <span>info@ritamhotel.com</span>
               </li>
             </ul>
           </div>
@@ -83,7 +83,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm font-light text-gray-500">
-            &copy; 2024 Gold Stone Hotel. All rights reserved.
+            &copy; 2024 Ritam Hotel. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm">
             <Link href="/privacy" className="hover:text-amber-400 transition-colors">Privacy Policy</Link>

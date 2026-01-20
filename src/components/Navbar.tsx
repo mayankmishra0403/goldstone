@@ -48,7 +48,7 @@ export default function Navbar() {
             </div>
             <div>
               <div className={`font-serif text-xl font-medium tracking-wide transition-colors ${navbarStyle.logoColor}`}>
-                Gold Stone Hotel
+                Ritam Hotel
               </div>
               <div className={`text-xs tracking-widest uppercase transition-colors ${navbarStyle.logoSubColor}`}>
                 Kanpur
