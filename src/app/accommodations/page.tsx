@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 import FloatingCard from '@/components/ui/FloatingCard';
+import RoomsRealtime from '@/components/RoomsRealtime';
 import { Users, BedDouble, Maximize, Star, Filter } from 'lucide-react';
 // Removed 'Search' import
 export default async function AccommodationsPage() {
@@ -85,87 +86,8 @@ export default async function AccommodationsPage() {
             </div>
           )}
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {rooms.map((room, index) => {
-              const imageUrl = room.imageUrls && room.imageUrls.length > 0 && isValidUrl(room.imageUrls[0])
-                ? room.imageUrls[0]
-                : defaultImage;
-
-              return (
-                <FloatingCard key={room.$id} delay={index * 0.1}>
-                  <Link href={`/rooms/${room.slug}`} className="group block bg-white overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500">
-                    {/* Image */}
-                    <div className="relative h-80 overflow-hidden">
-                      <Image
-                        src={imageUrl}
-                        alt={room.name}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-700"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
-                      <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full">
-                        <span className="text-lg font-medium">₹{(room.pricePerNight / 100).toLocaleString('en-IN')}</span>
-                      </div>
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-6 space-y-4">
-                      <div className="flex items-center justify-between">
-                        <h3 className="font-serif text-2xl font-light">{room.name}</h3>
-                        <div className="flex gap-0.5">
-                          {[...Array(5)].map((_, i) => (
-                            <Star key={i} className="w-4 h-4 text-amber-500" fill="currentColor" />
-                          ))}
-                        </div>
-                      </div>
-                      
-                      <p className="text-gray-600 font-light leading-relaxed line-clamp-2">
-                        {room.description}
-                      </p>
-                      
-                      {/* Features */}
-                      <div className="flex items-center gap-6 pt-4 border-t border-gray-100 text-sm text-gray-500">
-                        <div className="flex items-center gap-2">
-                          <Users className="w-4 h-4" strokeWidth={1.5} />
-                          <span className="font-light">{room.capacity} Guests</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <BedDouble className="w-4 h-4" strokeWidth={1.5} />
-                          <span className="font-light">{room.beds} Bed{room.beds > 1 ? 's' : ''}</span>
-                        </div>
-                        {room.sizeSqFt && (
-                          <div className="flex items-center gap-2">
-                            <Maximize className="w-4 h-4" strokeWidth={1.5} />
-                            <span className="font-light">{room.sizeSqFt} sq ft</span>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Amenities */}
-                      {room.amenities && room.amenities.length > 0 && (
-                        <div className="flex flex-wrap gap-2 pt-4">
-                          {room.amenities.slice(0, 3).map((amenity, idx) => (
-                            <span 
-                              key={idx} 
-                              className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full"
-                            >
-                              {amenity}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* CTA */}
-                      <div className="pt-4">
-                        <span className="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
-                          View Details & Book →
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </FloatingCard>
-              );
-            })}
+          <div>
+            <RoomsRealtime initialRooms={rooms} />
           </div>
 
           {rooms.length === 0 && !error && (
